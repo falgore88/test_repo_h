@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 import csv
 import random
 
@@ -15,14 +15,19 @@ with open('test.csv', 'r') as f:
 
 
 def handler():
+    url = None
+    print(request.args, request.data, request.is_json, request.headers)
     if request.args.get('url'):
         url = request.args.get('url')
     elif request.args.get('domain'):
         url = request.args.get('domain')
     elif request.is_json:
-        url = request.json.get('url')
-    
-    print(url)
+        if request.json.get('url'):
+            url = request.json.get('url')
+        elif request.json.get('domain'):
+            url = request.json.get('domain')
+    if not url:
+        return abort(400)
     return jsonify(random.choice(data))
 
 
