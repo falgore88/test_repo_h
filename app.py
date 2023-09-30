@@ -1,10 +1,13 @@
-from flask import Flask
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
 
 def handler():
-    return 'test'
+    return jsonify({
+        'category': 'test',
+        'theme': 'test'
+    })
 
 
 @app.route('/check_domain', methods=['GET', 'POST'])
